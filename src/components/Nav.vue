@@ -15,7 +15,10 @@
           v-if="!$auth.isAuthenticated"
           @click="login"
         >Login</b-button>
-        <b-navbar-nav v-if="$auth.isAuthenticated">
+        <b-navbar-nav
+          v-if="$auth.isAuthenticated"
+          class="flex-row"
+        >
           <b-nav-item-dropdown
             :text="$auth.user.name"
             right
@@ -24,8 +27,9 @@
           </b-nav-item-dropdown>
           <img
             :src="$auth.user.picture"
-            width="30"
-            height="30"
+            width="40"
+            height="40"
+            class="ml-2"
           >
         </b-navbar-nav>
       </b-navbar-nav>
