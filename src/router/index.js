@@ -1,10 +1,11 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '@/views/Home.vue'
-import Profile from '@/views/Profile.vue'
-import { authGuard } from "@/auth/authGuard";
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '@/views/Home.vue';
+import Form from '@/views/Form.vue';
+import Tracker from '@/views/Tracker.vue';
+import { authGuard } from '@/auth/authGuard';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const router = new VueRouter({
   mode: 'history',
@@ -12,16 +13,22 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Home',
       component: Home
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: Profile,
+      path: '/form',
+      name: 'Form',
+      component: Form,
+      beforeEnter: authGuard
+    },
+    {
+      path: '/tracker',
+      name: 'Tracker',
+      component: Tracker,
       beforeEnter: authGuard
     }
   ]
-})
+});
 
-export default router
+export default router;

@@ -1,16 +1,11 @@
 <template>
-  <div class="home">
-    <Tracker></Tracker>
-  </div>
+  <div class="home"></div>
 </template>
 
 <script>
-import Tracker from "@/components/Tracker.vue";
 export default {
-  name: "home",
-  components: {
-    Tracker
-  },
+  name: 'Home',
+  components: {},
   methods: {
     // Log the user in
     login() {

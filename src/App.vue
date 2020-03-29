@@ -6,11 +6,10 @@
 </template>
 
 <script>
-import Nav from "./components/Nav.vue";
-import * as api from "@/utils/api.js";
+import Nav from './components/Nav.vue';
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
     Nav
   },
