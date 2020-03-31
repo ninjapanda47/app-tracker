@@ -10,6 +10,7 @@
         :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc"
         responsive="sm"
+        v-show="showTracker"
       >
         <template v-slot:cell(jobUrl)="row">
           <b-button
@@ -27,11 +28,19 @@
             @click="info(row.item, row.index, $event.target)"
             class="mr-1"
           >
-            Show Notes
+            Show
+          </b-button>
+          <b-button
+            size="sm"
+            @click="getNoteForUpdate(row.item)"
+            variant="primary"
+            class="mr-1"
+          >
+            Update
           </b-button>
         </template>
         <template v-slot:cell(updateStatus)="row">
-          <b-button size="sm" class="mr-1">
+          <b-button size="sm" variant="primary" class="mr-1">
             Update status
           </b-button>
         </template>
@@ -42,6 +51,12 @@
         >, Sort Direction:
         <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
       </div>
+      <Note
+        v-show="showNote"
+        @updateNote="updateNote"
+        @cancel="cancel"
+        ref="note"
+      ></Note>
       <b-modal
         :id="infoModal.id"
         :title="infoModal.title"
@@ -56,11 +71,15 @@
 <script>
 import * as api from '@/utils/api.js';
 import { mapGetters, mapActions } from 'vuex';
+import Note from '@/components/Note.vue';
 const moment = require('moment');
 
 export default {
   name: 'Tracker',
-  computed: mapGetters(['jobsByUser']),
+  components: {
+    Note
+  },
+  computed: mapGetters(['jobsByUser', 'job']),
   data() {
     return {
       sortBy: 'dateApplied',
@@ -78,11 +97,13 @@ export default {
         id: 'info-modal',
         title: 'Notes',
         content: ''
-      }
+      },
+      showNote: false,
+      showTracker: true
     };
   },
   methods: {
-    ...mapActions(['getJobsByUser']),
+    ...mapActions(['getJobsByUser', 'jobDetail']),
     info(item, index, button) {
       this.infoModal.content = item.notes;
       this.$root.$emit('bv::show::modal', this.infoModal.id, button);
@@ -92,6 +113,21 @@ export default {
     },
     goToUrl(url) {
       window.open(url, '_blank');
+    },
+    getNoteForUpdate(item) {
+      this.jobDetail(item);
+      this.$refs.note.setNote();
+      this.showNote = true;
+      this.showTracker = false;
+    },
+    updateNote(id, update) {
+      const updatedNote = update;
+      const jobId = id;
+      console.log('testing', jobId, updatedNote);
+    },
+    cancel() {
+      this.showNote = false;
+      this.showTracker = true;
     }
   },
   created() {

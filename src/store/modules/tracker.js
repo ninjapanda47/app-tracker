@@ -2,11 +2,13 @@ import * as api from '@/utils/api.js';
 import moment from 'moment';
 
 const state = {
-  jobs: []
+  jobs: [],
+  job: {}
 };
 
 const getters = {
-  jobsByUser: state => state.jobs
+  jobsByUser: state => state.jobs,
+  job: state => state.job
 };
 
 const actions = {
@@ -20,12 +22,16 @@ const actions = {
   async addNewJob({ commit }, job) {
     let response = await api.addApplication(job);
     commit('newJob', response);
+  },
+  async jobDetail({ commit }, job) {
+    commit('jobDetail', job);
   }
 };
 
 const mutations = {
   setJobs: (state, jobs) => (state.jobs = jobs),
-  newJob: (state, job) => state.jobs.push(job)
+  newJob: (state, job) => state.jobs.push(job),
+  jobDetail: (state, job) => (state.job = job)
 };
 
 export default {
