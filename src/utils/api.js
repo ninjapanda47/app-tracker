@@ -1,4 +1,5 @@
-const api = 'http://localhost:7000';
+// const api = 'http://localhost:7000';
+const api = 'https://app-tracker-server.herokuapp.com';
 
 let token = localStorage.token;
 
@@ -12,14 +13,21 @@ const headers = {
 };
 
 // Get application by user
-export const getApplicationsbyUser = async id => {
+export const getAppsByUser = async id => {
   let response = await fetch(`${api}/getByUser/${id}`, { headers });
   let data = await response.json();
   return data;
 };
 
+// Get application by user
+export const getStatsByUser = async id => {
+  let response = await fetch(`${api}/getStatsByUser/${id}`, { headers });
+  let data = await response.json();
+  return data;
+};
+
 // Add new application
-export const addApplication = async job => {
+export const addApp = async job => {
   let response = await fetch(`${api}/addJob`, {
     method: 'POST',
     headers: {
@@ -32,15 +40,30 @@ export const addApplication = async job => {
   return data;
 };
 
-// Update item
-export const updateItem = async (id, update) => {
+// Update application
+export const updateApp = async update => {
   let response = await fetch(`${api}/updateJob`, {
     method: 'POST',
     headers: {
       ...headers,
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ id: id, update: update })
+    body: JSON.stringify(update)
+  });
+  let data = await response.json();
+  return data;
+};
+
+// Delete application
+export const deleteApp = async id => {
+  console.log('in API', id);
+  let response = await fetch(`${api}/deleteJob`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(id)
   });
   let data = await response.json();
   return data;

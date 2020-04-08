@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-container fluid="true" class="mx-3 my-3">
+      <StatBar></StatBar>
       <b-table
         striped
         hover
@@ -40,9 +41,21 @@
           </b-button>
         </template>
         <template v-slot:cell(updateStatus)="row">
-          <b-button size="sm" variant="primary" class="mr-1">
-            Update status
-          </b-button>
+          <b-form-select
+            @change="onSelect(row.item._id)"
+            :options="options"
+            class="w-75"
+            size="sm"
+          ></b-form-select>
+          <b-icon
+            icon="x-square-fill"
+            style="width: 40px; height: 40px;"
+            class="align-middle ml-1 my-0"
+            variant="danger"
+            v-b-tooltip.hover
+            title="Delete job"
+            @click="deleteApp(row.item._id)"
+          ></b-icon>
         </template>
       </b-table>
 
@@ -72,17 +85,19 @@
 import * as api from '@/utils/api.js';
 import { mapGetters, mapActions } from 'vuex';
 import Note from '@/components/Note.vue';
+import StatBar from '@/components/StatBar.vue';
 const moment = require('moment');
 
 export default {
   name: 'Tracker',
   components: {
-    Note
+    Note,
+    StatBar
   },
   computed: mapGetters(['jobsByUser', 'job']),
   data() {
     return {
-      sortBy: 'dateApplied',
+      sortBy: '',
       sortDesc: false,
       fields: [
         { key: 'companyName', sortable: false },
@@ -92,6 +107,13 @@ export default {
         { key: 'status', sortable: true },
         { key: 'notes', sortable: false },
         { key: 'updateStatus' }
+      ],
+      app: [],
+      options: [
+        'Applied',
+        'Interview in progress',
+        'Rejected',
+        'Offer received'
       ],
       infoModal: {
         id: 'info-modal',
@@ -103,7 +125,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getJobsByUser', 'jobDetail']),
+    ...mapActions([
+      'getJobsByUser',
+      'getStatsByUser',
+      'jobDetail',
+      'updateJob',
+      'deleteJob'
+    ]),
     info(item, index, button) {
       this.infoModal.content = item.notes;
       this.$root.$emit('bv::show::modal', this.infoModal.id, button);
@@ -120,19 +148,28 @@ export default {
       this.showNote = true;
       this.showTracker = false;
     },
-    updateNote(id, update) {
-      const updatedNote = update;
-      const jobId = id;
-      console.log('testing', jobId, updatedNote);
+    updateNote(id, notes) {
+      const update = { notes: notes };
+      this.updateJob({ id, update });
     },
     cancel() {
       this.showNote = false;
       this.showTracker = true;
+    },
+    onSelect(id) {
+      const userId = this.$auth.user.sub;
+      const update = { status: event.target.value };
+      this.updateJob({ id, update });
+      this.getStatsByUser(userId);
+    },
+    deleteApp(id) {
+      this.deleteJob({ id });
     }
   },
   created() {
     const userId = this.$auth.user.sub;
     this.getJobsByUser(userId);
+    this.getStatsByUser(userId);
   }
 };
 </script>

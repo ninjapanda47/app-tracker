@@ -51,7 +51,6 @@
                   id="jobUrl"
                   v-model="form.jobUrl"
                   type="text"
-                  required
                 ></b-form-input>
               </b-form-group>
             </b-col>
