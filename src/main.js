@@ -8,8 +8,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 // Import the Auth0 configuration
 // import { domain, clientId } from '../auth_config.json';
-const domain = process.env.DOMAIN;
-const clientId = process.env.CLIENT_ID;
+const domain = process.env.VUE_APP_DOMAIN;
+const clientId = process.env.VUE_APP_CLIENT_ID;
 
 // Import the plugin here
 import { Auth0Plugin } from './auth';
