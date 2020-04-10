@@ -20,7 +20,7 @@
             target="_blank"
             class="mr-1"
           >
-            Go to Job Desc
+            Job Desc
           </b-button>
         </template>
         <template v-slot:cell(notes)="row">
@@ -99,12 +99,12 @@ export default {
       sortBy: '',
       sortDesc: false,
       fields: [
-        { key: 'companyName', sortable: false },
-        { key: 'jobTitle', sortable: false },
+        { key: 'companyName', thStyle: { width: '12em' }, sortable: false },
+        { key: 'jobTitle', thStyle: { width: '15em' }, sortable: false },
         { key: 'jobUrl', sortable: false },
         { key: 'dateApplied', sortable: true },
-        { key: 'status', sortable: true },
-        { key: 'notes', sortable: false },
+        { key: 'status', thStyle: { width: '10em' }, sortable: true },
+        { key: 'notes', thStyle: { width: '10em' }, sortable: false },
         { key: 'updateStatus' }
       ],
       app: [],
