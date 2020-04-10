@@ -1,5 +1,5 @@
 import * as api from '@/utils/api.js';
-import moment from 'moment';
+import * as format from '@/utils/format.js';
 
 const state = {
   jobs: [],
@@ -17,7 +17,7 @@ const actions = {
   async getJobsByUser({ commit }, userId) {
     let results = await api.getAppsByUser(userId);
     results.forEach(element => {
-      element.dateApplied = moment(element.dateApplied).format('MM-DD-YYYY');
+      element.dateApplied = format.formatDate(element.dateApplied);
     });
     commit('setJobs', results);
   },
@@ -27,13 +27,14 @@ const actions = {
   },
   async addNewJob({ commit }, job) {
     let response = await api.addApp(job);
-    commit('newJob', response);
+    response.dateApplied = commit('newJob', response);
   },
   async jobDetail({ commit }, job) {
     commit('jobDetail', job);
   },
   async updateJob({ commit }, update) {
     let response = await api.updateApp(update);
+    response.dateApplied = format.formatDate(response.dateApplied);
     commit('updateJob', response);
   },
   async deleteJob({ commit }, update) {
@@ -48,9 +49,6 @@ const mutations = {
   newJob: (state, job) => state.jobs.push(job),
   jobDetail: (state, job) => (state.job = job),
   updateJob: (state, updatedJob) => {
-    updatedJob.dateApplied = moment(updatedJob.dateApplied).format(
-      'MM-DD-YYYY'
-    );
     state.jobs = state.jobs.map(job => {
       if (job._id === updatedJob._id) {
         job = updatedJob;

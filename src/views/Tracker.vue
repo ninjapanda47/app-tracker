@@ -3,9 +3,9 @@
     <b-container fluid="true" class="mx-3 my-3">
       <StatBar></StatBar>
       <b-table
-        striped
         hover
         bordered
+        :tbody-tr-class="rowClass"
         :items="jobsByUser"
         :fields="fields"
         :sort-by.sync="sortBy"
@@ -86,7 +86,6 @@ import * as api from '@/utils/api.js';
 import { mapGetters, mapActions } from 'vuex';
 import Note from '@/components/Note.vue';
 import StatBar from '@/components/StatBar.vue';
-const moment = require('moment');
 
 export default {
   name: 'Tracker',
@@ -132,6 +131,11 @@ export default {
       'updateJob',
       'deleteJob'
     ]),
+    rowClass(item, type) {
+      if (!item || type !== 'row') return;
+      if (item.status === 'Rejected') return 'table-danger';
+      if (item.status === 'Interview in progress') return 'table-info';
+    },
     info(item, index, button) {
       this.infoModal.content = item.notes;
       this.$root.$emit('bv::show::modal', this.infoModal.id, button);

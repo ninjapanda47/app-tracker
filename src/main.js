@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 
 // Import the Auth0 configuration
-// import { domain, clientId } from '../auth_config.json';
 const domain = process.env.VUE_APP_DOMAIN;
 const clientId = process.env.VUE_APP_CLIENT_ID;
 
